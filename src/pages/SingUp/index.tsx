@@ -2,6 +2,7 @@ import React, { useCallback, useRef } from 'react';
 import { FiArrowLeft, FiMail, FiLock, FiUser } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
+import getValidationErros from '../../utils/getValidationErros';
 
 import { Container, Content, Background } from './styles';
 import logoImg from '../../assets/logo.svg';
@@ -16,15 +17,19 @@ interface FormData {
 }
 
 const SignUp: React.FC = () => {
-  const formRef = useRef(null);
+  const formRef = useRef<FormHandles>(null);
 
   const handleSubmit = useCallback(async (data: FormData) => {
     try {
+      formRef.current?.setErrors({});
+
       await schema.validate(data, {
         abortEarly: false,
       });
     } catch (err) {
-      console.log(err);
+      const errors = getValidationErros(err);
+
+      formRef.current?.setErrors(errors);
     }
   }, []);
 
