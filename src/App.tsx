@@ -1,19 +1,18 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
-import { AuthProvider } from './contexts/AuthContext';
+import AppProvider from './hooks';
 import GlobalStyle from './styles/global';
-import SignIn from './pages/SignIn';
-// import SignUp from './pages/SingUp';
+import Routes from './routes';
 
 const App: React.FC = () => (
-  <>
-    <AuthProvider>
-      <SignIn />
-      {/* <SignUp /> */}
-    </AuthProvider>
+  <BrowserRouter>
+    <AppProvider>
+      <Routes />
+    </AppProvider>
 
     <GlobalStyle />
-  </>
+  </BrowserRouter>
 );
 
 export default App;
