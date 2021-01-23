@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { isToday, format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { FiClock, FiPower } from 'react-icons/fi';
@@ -19,6 +21,15 @@ import {
 import logo from '../../assets/logo.svg';
 import api from '../../services/api';
 
+interface Appointments {
+  id: string;
+  date: string;
+  user: {
+    name: string;
+    avatar_url: string;
+  };
+}
+
 interface MonthAvailability {
   day: number;
   available: boolean;
@@ -30,6 +41,7 @@ const DashBoard: React.FC = () => {
   const [monthAvailability, setMonthAvailability] = useState<
     MonthAvailability[]
   >([]);
+  const [appointments, setAppointments] = useState<Appointments[]>([]);
 
   const { signOut, user } = useAuth();
 
@@ -52,6 +64,18 @@ const DashBoard: React.FC = () => {
       .then(({ data }) => setMonthAvailability(data));
   }, [currentMonth, user.id]);
 
+  useEffect(() => {
+    api
+      .get('/appointments/me', {
+        params: {
+          year: selectedDate.getFullYear(),
+          month: selectedDate.getMonth() + 1,
+          day: selectedDate.getDate(),
+        },
+      })
+      .then(({ data }) => setAppointments(data));
+  }, [selectedDate]);
+
   const disabledDays = useMemo(() => {
     const dates = monthAvailability
       .filter(monthDay => monthDay.available === false)
@@ -65,7 +89,15 @@ const DashBoard: React.FC = () => {
     return dates;
   }, [currentMonth, monthAvailability]);
 
-  console.log('disabledDays', disabledDays.length);
+  const checkDateIsToday = useMemo(() => isToday(selectedDate), [selectedDate]);
+  const dayFormatted = useMemo(() => {
+    return format(selectedDate, "'Dia' dd 'de' MMMM", {
+      locale: ptBR,
+    });
+  }, [selectedDate]);
+  const selectedWeekDay = useMemo(() => {
+    return format(selectedDate, 'cccc', { locale: ptBR });
+  }, [selectedDate]);
 
   return (
     <Containter>
@@ -93,9 +125,9 @@ const DashBoard: React.FC = () => {
           <h1>Horários agendados</h1>
 
           <p>
-            <span>Hoje</span>
-            <span>Dia 06</span>
-            <span>Segunda-feira</span>
+            {checkDateIsToday && <span>{checkDateIsToday && 'Hoje'}</span>}
+            <span>{dayFormatted}</span>
+            <span>{selectedWeekDay}</span>
           </p>
 
           <NextAppointment>
