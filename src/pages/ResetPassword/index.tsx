@@ -1,6 +1,6 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { FiLock } from 'react-icons/fi';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
@@ -12,6 +12,7 @@ import logoImg from '../../assets/logo.svg';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import schema from './formValidation';
+import api from '../../services/api';
 
 interface ResetPasswordData {
   password: string;
@@ -19,21 +20,36 @@ interface ResetPasswordData {
 }
 
 const ResetPassword: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const formRef = useRef<FormHandles>(null);
   const history = useHistory();
+  const location = useLocation();
 
   const { addToast } = useToast();
 
   const handleSubmit = useCallback(
     async (data: ResetPasswordData) => {
       try {
+        setLoading(true);
+
         formRef.current?.setErrors({});
 
         await schema.validate(data, {
           abortEarly: false,
         });
 
-        // history.push('/dashboard');
+        const { password, password_confirmation } = data;
+        const token = location.search.replace('?token=', '');
+
+        if (!token) throw new Error();
+
+        await api.post('password/reset', {
+          password,
+          password_confirmation,
+          token,
+        });
+
+        history.push('/');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErros(err);
@@ -48,9 +64,11 @@ const ResetPassword: React.FC = () => {
           title: 'Erro na resetar senha.',
           description: 'Tente novamente.',
         });
+      } finally {
+        setLoading(false);
       }
     },
-    [addToast, history],
+    [addToast, history, location.search],
   );
 
   return (
@@ -76,7 +94,9 @@ const ResetPassword: React.FC = () => {
               type="password"
             />
 
-            <Button type="submit">Alterar senha</Button>
+            <Button loading={loading} type="submit">
+              Alterar senha
+            </Button>
           </Form>
         </AnimatedContainer>
       </Content>

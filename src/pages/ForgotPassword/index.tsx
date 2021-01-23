@@ -21,7 +21,6 @@ interface ForgotPasswordData {
 const ForgotPassword: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const formRef = useRef<FormHandles>(null);
-  // const history = useHistory();
 
   const { addToast } = useToast();
 
@@ -45,8 +44,6 @@ const ForgotPassword: React.FC = () => {
           title: 'E-mail de recuperação enviado',
           description: 'Enviamos uma e-mail para recuperação de senha.',
         });
-
-        // history.push('/dashboard');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErros(err);
