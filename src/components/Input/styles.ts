@@ -48,7 +48,7 @@ export const Container = styled.div<ContainerProps>`
     caret-color: #666360;
     color: #fff;
 
-    &:placeholder {
+    &::placeholder {
       color: #666360;
     }
   }

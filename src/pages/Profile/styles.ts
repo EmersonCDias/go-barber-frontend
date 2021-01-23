@@ -32,7 +32,8 @@ export const AvatarInput = styled.div`
     height: 186px;
   }
 
-  button {
+  label {
+    cursor: pointer;
     position: absolute;
     width: 50px;
     height: 50px;
@@ -46,6 +47,10 @@ export const AvatarInput = styled.div`
     align-items: center;
     justify-content: center;
 
+    input {
+      display: none;
+    }
+
     &:hover {
       background: ${shade(0.2, '#ff9000')};
     }
@@ -53,6 +58,7 @@ export const AvatarInput = styled.div`
     svg {
       width: 20px;
       height: 20px;
+      color: #000;
     }
   }
 `;
