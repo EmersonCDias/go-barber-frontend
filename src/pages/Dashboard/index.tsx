@@ -1,8 +1,17 @@
 import React from 'react';
-import { FiPower } from 'react-icons/fi';
+import { FiClock, FiPower } from 'react-icons/fi';
 
 import { useAuth } from '../../hooks/AuthHook';
-import { Containter, Header, HeaderContent, Profile } from './styles';
+import {
+  Containter,
+  Header,
+  HeaderContent,
+  Profile,
+  Content,
+  Schedule,
+  Calendar,
+  NextAppointment,
+} from './styles';
 import logo from '../../assets/logo.svg';
 
 const DashBoard: React.FC = () => {
@@ -28,6 +37,35 @@ const DashBoard: React.FC = () => {
           </button>
         </HeaderContent>
       </Header>
+
+      <Content>
+        <Schedule>
+          <h1>Horários agendados</h1>
+
+          <p>
+            <span>Hoje</span>
+            <span>Dia 06</span>
+            <span>Segunda-feira</span>
+          </p>
+
+          <NextAppointment>
+            <strong>Atendimento a seguir</strong>
+
+            <div>
+              <img
+                src="https://avatars.githubusercontent.com/u/19658244?s=460&u=205d8b8c6743299b4cc2b784a3c4669d9d91fe6c&v=4"
+                alt="Emerson Dias"
+              />
+
+              <strong>Emerson Dias</strong>
+
+              <span>{<FiClock />} 08:00</span>
+            </div>
+          </NextAppointment>
+        </Schedule>
+
+        <Calendar />
+      </Content>
     </Containter>
   );
 };
