@@ -53,8 +53,12 @@ export const Profile = styled.div`
     color: #f4ede8;
   }
 
-  strong {
+  a {
     color: #ff9000;
+
+    :hover {
+      opacity: 0.7;
+    }
   }
 `;
 
@@ -158,6 +162,11 @@ export const Section = styled.section`
     display: block;
     padding-bottom: 16px;
     margin-bottom: 16px;
+  }
+
+  p {
+    color: #999591;
+    opacity: 0.3;
   }
 `;
 
