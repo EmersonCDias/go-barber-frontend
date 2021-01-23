@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { FiLogIn, FiMail } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
@@ -12,12 +12,14 @@ import logoImg from '../../assets/logo.svg';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import schema from './formValidation';
+import api from '../../services/api';
 
 interface ForgotPasswordData {
   email: string;
 }
 
 const ForgotPassword: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const formRef = useRef<FormHandles>(null);
   // const history = useHistory();
 
@@ -26,10 +28,22 @@ const ForgotPassword: React.FC = () => {
   const handleSubmit = useCallback(
     async (data: ForgotPasswordData) => {
       try {
+        setLoading(true);
+
         formRef.current?.setErrors({});
 
         await schema.validate(data, {
           abortEarly: false,
+        });
+
+        await api.post('password/forgot', {
+          email: data.email,
+        });
+
+        addToast({
+          type: 'success',
+          title: 'E-mail de recuperação enviado',
+          description: 'Enviamos uma e-mail para recuperação de senha.',
         });
 
         // history.push('/dashboard');
@@ -47,6 +61,8 @@ const ForgotPassword: React.FC = () => {
           title: 'Erro na recuperação de senha',
           description: 'Verifique seu e-mail.',
         });
+      } finally {
+        setLoading(false);
       }
     },
     [addToast],
@@ -63,7 +79,9 @@ const ForgotPassword: React.FC = () => {
 
             <Input name="email" icon={FiMail} placeholder="E-mail" />
 
-            <Button type="submit">Recuperar</Button>
+            <Button loading={loading} type="submit">
+              Recuperar
+            </Button>
           </Form>
 
           <Link to="/">
