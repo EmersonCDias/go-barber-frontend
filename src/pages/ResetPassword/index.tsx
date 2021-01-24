@@ -94,9 +94,7 @@ const ResetPassword: React.FC = () => {
               type="password"
             />
 
-            <Button loading={loading} type="submit">
-              Alterar senha
-            </Button>
+            <Button type="submit">Alterar senha</Button>
           </Form>
         </AnimatedContainer>
       </Content>

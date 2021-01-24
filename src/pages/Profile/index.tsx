@@ -17,7 +17,9 @@ import { Container, Content, AvatarInput } from './styles';
 interface ProfileFormData {
   name: string;
   email: string;
+  old_password: string;
   password: string;
+  password_confirmation: string;
 }
 
 const Profile: React.FC = () => {
@@ -34,11 +36,27 @@ const Profile: React.FC = () => {
       try {
         formRef.current?.setErrors({});
 
+        console.log('data', data);
+
         await schema.validate(data, {
           abortEarly: false,
         });
 
-        await api.post('/users', data);
+        const formData = {
+          name: data.name,
+          email: data.email,
+          ...(data.old_password
+            ? {
+                old_password: data.old_password,
+                password: data.password,
+                password_confirmation: data.password_confirmation,
+              }
+            : {}),
+        };
+
+        const response = await api.put('/profile', formData);
+
+        updateUser(response.data);
 
         addToast({
           type: 'success',
@@ -46,7 +64,7 @@ const Profile: React.FC = () => {
           description: 'Você já pode fazer seu logon',
         });
 
-        history.push('/');
+        history.push('/dashboard');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErros(err);
@@ -58,7 +76,7 @@ const Profile: React.FC = () => {
 
         addToast({
           type: 'error',
-          title: 'Erro ao fazer o cadastro',
+          title: 'Erro na atualização!',
           description: 'Tente novamente',
         });
       }
