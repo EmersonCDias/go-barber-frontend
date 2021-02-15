@@ -36,8 +36,6 @@ const Profile: React.FC = () => {
       try {
         formRef.current?.setErrors({});
 
-        console.log('data', data);
-
         await schema.validate(data, {
           abortEarly: false,
         });
