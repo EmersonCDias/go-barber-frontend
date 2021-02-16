@@ -47,8 +47,12 @@ const SignIn: React.FC = () => {
 
           formRef.current?.setErrors(errors);
 
+          console.log('1 teste');
+
           return;
         }
+
+        console.log('2 teste');
 
         addToast({
           type: 'error',
