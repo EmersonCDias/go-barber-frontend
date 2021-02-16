@@ -128,7 +128,7 @@ const DashBoard: React.FC = () => {
     return appointments.find(appointment =>
       isAfter(parseISO(appointment.date), new Date()),
     );
-  }, [appointments, selectedDate]);
+  }, [appointments]);
 
   return (
     <Containter>

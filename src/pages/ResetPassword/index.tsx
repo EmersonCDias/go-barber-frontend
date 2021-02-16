@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { FiLock } from 'react-icons/fi';
 import { useHistory, useLocation } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
@@ -20,7 +20,6 @@ interface ResetPasswordData {
 }
 
 const ResetPassword: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(false);
   const formRef = useRef<FormHandles>(null);
   const history = useHistory();
   const location = useLocation();
@@ -30,8 +29,6 @@ const ResetPassword: React.FC = () => {
   const handleSubmit = useCallback(
     async (data: ResetPasswordData) => {
       try {
-        setLoading(true);
-
         formRef.current?.setErrors({});
 
         await schema.validate(data, {
@@ -64,8 +61,6 @@ const ResetPassword: React.FC = () => {
           title: 'Erro na resetar senha.',
           description: 'Tente novamente.',
         });
-      } finally {
-        setLoading(false);
       }
     },
     [addToast, history, location.search],
