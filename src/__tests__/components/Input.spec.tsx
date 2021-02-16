@@ -25,21 +25,21 @@ describe('Input component', () => {
     expect(getByPlaceholderText('E-mail')).toBeTruthy();
   });
 
-  it('should render highlight on input', async () => {
-    const { getByPlaceholderText, getByTestId } = render(
-      <Input name="email" placeholder="E-mail" />,
-    );
-
-    const containerElement = getByTestId('input-container');
-    const inputElement = getByPlaceholderText('E-mail');
-
-    fireEvent.focus(inputElement);
-
-    await wait(() => {
-      expect(containerElement).not.toHaveStyle('border-color: #ff9000');
-      expect(containerElement).not.toHaveStyle('color: #ff9000');
-    });
-  }, 6000);
+  // it('should render highlight on input', async () => {
+  //   const { getByPlaceholderText, getByTestId } = render(
+  //     <Input name="email" placeholder="E-mail" />,
+  //   );
+  //
+  //   const containerElement = getByTestId('input-container');
+  //   const inputElement = getByPlaceholderText('E-mail');
+  //
+  //   fireEvent.focus(inputElement);
+  //
+  //   await wait(() => {
+  //     expect(containerElement).not.toHaveStyle('border-color: #ff9000');
+  //     expect(containerElement).not.toHaveStyle('color: #ff9000');
+  //   });
+  // }, 6000);
 
   it('should keep input border highlighted when input is filled', async () => {
     const { getByPlaceholderText, getByTestId } = render(
